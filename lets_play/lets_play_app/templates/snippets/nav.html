@@ -1,0 +1,10 @@
+<div class="container">
+    <a href="/">Strona główna</a>
+    {% if user.is_authenticated %}
+        Zalogowany: {{ user.username }}
+        <a href="logout">Wyloguj</a>
+
+    {% else %}
+        <a href="/login">Logowanie/Rejestracja</a>
+    {% endif %}
+</div>

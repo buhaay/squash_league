@@ -15,7 +15,17 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from lets_play_app.views import SignUpView, HomeView, ShowProfileView
+from django.contrib.auth import views as auth_views
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^$', HomeView.as_view(), name='home'),
+    url(r'^signup/$', SignUpView.as_view(), name='signup'),
+    url(r'^login/$', auth_views.login, name='login'),
+    url(r'^logout/$', auth_views.logout, name='logout'),
+    url(r'^profile/(?P<username>[a-zA-Z0-9]+)$', ShowProfileView.as_view()),
+
+
 ]
