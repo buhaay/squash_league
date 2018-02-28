@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'lets_play_app'
+    'lets_play_app',
+    'datetimepicker',
+
 ]
 
 MIDDLEWARE = [
