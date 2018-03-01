@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <ul>
+    {% for obj in sport_centres %}
+
+    <li> {{ obj.name }}</li>
+    <li> {{ obj.address }}</li>
+    <li><a href="{{ obj.domain }}">{{ obj.domain }}</a></li>
+    <li> {{ obj.phone_number }}</li>
+
+    {% endfor %}
+    </ul>
+{% endblock %}

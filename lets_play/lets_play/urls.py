@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from lets_play_app.views import SignUpView, HomeView, ShowProfileView, CreateReservationView, SportCenterDetailView
+from lets_play_app.views import SignUpView, HomeView, ShowProfileView, CreateReservationView,\
+    SportCenterDetailView, SportCenterListView, JoinRoomView, ReservationDetailView
 from django.contrib.auth import views as auth_views
 
 
@@ -25,9 +26,12 @@ urlpatterns = [
     url(r'^signup/$', SignUpView.as_view(), name='signup'),
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': 'home'}, name='logout'),
-    url(r'^profile/(?P<username>[a-zA-Z0-9]+)$', ShowProfileView.as_view(), name='profile'),
-    url(r'^create_room/$', CreateReservationView.as_view(), name='create_room'),
+    url(r'^profile/(?P<user_id>[0-9]+)$', ShowProfileView.as_view(), name='profile'),
+    url(r'^create_reservation/$', CreateReservationView.as_view(), name='create_reservation'),
     url(r'^sport_center/(?P<slug>[\w-]+)$', SportCenterDetailView.as_view(), name='sp_detail'),
+    url(r'^sport_centres/$', SportCenterListView.as_view(), name='create_room'),
+    url(r'^rooms/$', JoinRoomView.as_view(), name='rooms'),
+    url(r'^rooms/(?P<room_id>[\d]+)$', ReservationDetailView.as_view(), name='room'),
 
     #reset password
     url(r'^password_reset/$', auth_views.password_reset, name='password_reset'),

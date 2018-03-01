@@ -12,7 +12,7 @@ skills = (
 
 
 class MyUser(AbstractUser):
-    skill = models.CharField(max_length=64, choices=skills)
+    skill = models.IntegerField(choices=skills, null=True)
 
 
 class SportCenter(models.Model):
@@ -45,9 +45,12 @@ class SquashCourt(models.Model):
 
 
 class Reservation(models.Model):
-    users = models.ForeignKey(MyUser)
-    date = models.DateTimeField()
-    location = models.ForeignKey(SportCenter)
+    user1 = models.ForeignKey(MyUser, related_name='user1')
+    user2 = models.ForeignKey(MyUser, related_name='user2', null=True)
+    date = models.DateField(auto_now=False, auto_now_add=False, verbose_name='Wybierz dzień')
+    time_start = models.TimeField(auto_now=False, auto_now_add=False, verbose_name='Początek rezerwacji')
+    time_end = models.TimeField(auto_now=False, auto_now_add=False, verbose_name='Koniec rezerwacji')
+    location = models.ForeignKey(SportCenter, verbose_name='Wybierz lokalizację')
     comment = models.CharField(max_length=256, null=True)
 
 

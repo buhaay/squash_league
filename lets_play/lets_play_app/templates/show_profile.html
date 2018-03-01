@@ -3,9 +3,10 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-    <li>{{ user.username }}</li>
-    <li>{{ user.email }}</li>
-    <li>{{ user.first_name }}</li>
-    <li>{{ user.last_name }}</li>
-    <li>{{ user.last_login }}</li>
+    <li>Username: <b>{{ user.username }}</b></li>
+    <li>E-mail: {{ user.email }}</li>
+    <li>Imię: {{ user.first_name }}</li>
+    <li>Nazwisko: {{ user.last_name }}</li>
+    <li>Ostatnio zalogowany: {{ user.last_login }}</li>
+    <li>Doświadczenie: {{ user.get_skill_display }}</li>
 {% endblock %}
