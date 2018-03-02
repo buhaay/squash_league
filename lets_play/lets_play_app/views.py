@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.dateparse import parse_date
 
 from .models import SportCenter, Reservation, MyUser
 from .forms import CreateReservationForm, SignUpForm
@@ -20,7 +21,7 @@ from django.views.generic import FormView, DetailView
 
 class HomeView(View):
     def get(self, request):
-        return render(request, 'home.html', {})
+        return render(request, 'index.html', {})
 
 
 class SignUpView(View):
@@ -44,8 +45,9 @@ class SignUpView(View):
 class ShowProfileView(View):
     def get(self, request, user_id):
         user = MyUser.objects.get(pk=user_id)
-        return render(request, 'show_profile.html', {"user": user})
-
+        games = user.reservation.all()
+        return render(request, 'show_profile.html', {"user": user,
+                                                     "games": games})
 
 class CreateReservationView(LoginRequiredMixin, View):
     def get(self, request):
@@ -57,15 +59,15 @@ class CreateReservationView(LoginRequiredMixin, View):
         if form.is_valid():
             location = form.cleaned_data['location']
             date = form.cleaned_data['date']
-            time_start = form.cleaned_data['time_start']
-            time_end = form.cleaned_data['time_end']
-            date_to_check = datetime.datetime.combine(date=date, time=time_start).timestamp()
-            now = datetime.datetime.now().timestamp()
-            if date_to_check < now:
-                message = 'Wybierz datę z przyszłości'
-                return render(request, 'create_reservation.html', {'message': message,
-                                                                   'form': form})
-            Reservation.objects.create(user1=request.user, location=location, date=date,
+            time_start = form.cleaned_data['time_start'] + ':00'
+            time_end = form.cleaned_data['time_end'] + ':00'
+            # date_to_check = datetime.datetime.combine(date=date, time=time_start).timestamp()
+            # now = datetime.datetime.now().timestamp()
+            # if date_to_check < now:
+            #     message = 'Wybierz datę z przyszłości'
+            #     return render(request, 'create_reservation.html', {'message': message,
+            #                                                        'form': form})
+            Reservation.objects.create(user_main=request.user, location=location, date=date,
                                        time_start=time_start, time_end=time_end)
             return redirect(reverse('home'))
 
@@ -87,7 +89,8 @@ class SportCenterDetailView(DetailView):
 
 class JoinRoomView(LoginRequiredMixin, View):
     def get(self, request):
-        rooms = Reservation.objects.filter(user2__isnull=True).exclude(user1=request.user)
+        rooms = Reservation.objects.filter(user_partner__isnull=True,
+                                           user_main__skill=request.user.skill).exclude(user_main=request.user)
         return render(request, 'room_list.html', {'rooms': rooms})
 
 
@@ -98,14 +101,21 @@ class ReservationDetailView(View):
 
     def post(self, request, room_id):
         room = Reservation.objects.get(pk=room_id)
-        if room.user2_id is None:
-            room.user2_id = request.user.id
+        if room.user_partner_id is None:
+            room.user_partner_id = request.user.id
             room.save()
             return redirect('rooms')
         else:
             message = "Pokój gry jest pełny, wybierz inny termin"
             ctx = {'message': message}
-            return render(request, 'full_room.html', ctx)
+            return render(request, 'room_list.html', ctx)
+
+
+def delete_room(request, room_id):
+    room = Reservation.objects.get(pk=room_id)
+    room.delete()
+    return redirect('/profile/%s' % request.user.id)
+
 
 
 

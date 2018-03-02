@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from lets_play_app.views import SignUpView, HomeView, ShowProfileView, CreateReservationView,\
-    SportCenterDetailView, SportCenterListView, JoinRoomView, ReservationDetailView
+    SportCenterDetailView, SportCenterListView, JoinRoomView, ReservationDetailView, delete_room
 from django.contrib.auth import views as auth_views
 
 
@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^sport_centres/$', SportCenterListView.as_view(), name='create_room'),
     url(r'^rooms/$', JoinRoomView.as_view(), name='rooms'),
     url(r'^rooms/(?P<room_id>[\d]+)$', ReservationDetailView.as_view(), name='room'),
+    url(r'^delete_room/(?P<room_id>[\d]+)$', delete_room, name='delete_room'),
 
     #reset password
     url(r'^password_reset/$', auth_views.password_reset, name='password_reset'),

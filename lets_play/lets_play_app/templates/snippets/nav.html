@@ -1,10 +1,15 @@
 <div class="container">
     <a href="/">Strona główna</a>
     {% if user.is_authenticated %}
+        <a href="/create_reservation">Zarezerwuj</a>
+        <a href="/rooms">Dołącz do gry</a>
         Zalogowany: <a href="/profile/{{ user.id }}">{{ user.username }}</a>
         <a href="/logout">Wyloguj</a>
 
+
     {% else %}
-        <a href="/login">Logowanie/Rejestracja</a>
+        <a href="signup">Rejestracja</a>
+        <a href="login">Logowanie</a>
+
     {% endif %}
 </div>

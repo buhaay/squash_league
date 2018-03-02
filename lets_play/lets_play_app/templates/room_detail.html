@@ -1,22 +1,22 @@
-{% extends 'base.html' %}
+{% extends 'index.html' %}
 
 {%  block content %}
-    {% csrf_token %}
-<table>
+    Lokalizacja: {{ room.location }}<br>
+    Data: {{ room.date }}<br>
+    Godzina rozpoczęcia: {{ room.time_start }}<br>
+    Godzina zakończenia: {{ room.time_end }}<br>
+    {% if request.user == room.user_main %}
+    Przeciwnik: {{ room.user_partner }}
+    {% else %}
+    Przeciwnik: {{ room.user_main }}
+    {% endif %}
 
-        <tr>
-            <td> {{ room.user1 }} </td>
-        </tr>
-        <tr>
-            <td>{{ room.location }}</td>
-        </tr>
-        <tr>
-            <td>{{ room.date }}</td>
-        </tr>
 
-</table>
+    {% if not room.user_main and room.user_partner %}
     <form method="POST">
     {% csrf_token %}
         <input type="submit" value="Dołącz do gry">
     </form>
+    {% endif %}<br>
+    <a href="/delete_room/{{ room.id }}" class="btn btn-secondary">Odwołaj rezerwację</a>
 {%  endblock %}

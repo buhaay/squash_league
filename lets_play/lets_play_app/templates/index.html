@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+{% block title %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Liga Squasha</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/simple-sidebar.css" rel="stylesheet">
+{% endblock %}
+</head>
+
+<body>
+    <div id="wrapper" class="toggled">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="/">
+                        Liga Squasha
+                    </a>
+                </li>
+                    {% if user.is_authenticated %}
+                        <li><a href="/create_reservation">Zarezerwuj</a></li>
+                        <li><a href="/rooms">Dołącz do gry</a></li>
+                        <li>Zalogowany: <a href="/profile/{{ user.id }}">{{ user.username }}</a></li>
+                        <li><a href="/logout">Wyloguj</a></li>
+
+
+                    {% else %}
+                        <li><a href="signup">Rejestracja</a></li>
+                        <li><a href="login">Logowanie</a></li>
+
+                    {% endif %}
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+    {% block content %}
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <h1>Liga Squasha</h1>
+
+{#                #page-content-wrapper#}
+                <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Pokaż Menu</a>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    {% endblock %}
+    <!-- /#wrapper -->
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+
+</body>
+
+</html>

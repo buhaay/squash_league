@@ -1,18 +1,16 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models.signals import pre_save
-from .utils import unique_slug_generator
 
-skills = (
-    (1, "amator"),
-    (2, "okazjonalny grajek"),
-    (3, "profesjonalista"),
-    (4, "terminator squasha"),
+SKILLS = (
+    (1, "Szturmowiec"),
+    (2, "Padawan"),
+    (3, "Rycerz Jedi"),
+    (4, "Mistrz Joda"),
 )
 
 
 class MyUser(AbstractUser):
-    skill = models.IntegerField(choices=skills, null=True)
+    skill = models.IntegerField(choices=SKILLS, null=True)
 
 
 class SportCenter(models.Model):
@@ -45,8 +43,8 @@ class SquashCourt(models.Model):
 
 
 class Reservation(models.Model):
-    user1 = models.ForeignKey(MyUser, related_name='user1')
-    user2 = models.ForeignKey(MyUser, related_name='user2', null=True)
+    user_main = models.ForeignKey(MyUser, related_name='reservation')
+    user_partner = models.ForeignKey(MyUser, related_name='user_partner', null=True)
     date = models.DateField(auto_now=False, auto_now_add=False, verbose_name='Wybierz dzień')
     time_start = models.TimeField(auto_now=False, auto_now_add=False, verbose_name='Początek rezerwacji')
     time_end = models.TimeField(auto_now=False, auto_now_add=False, verbose_name='Koniec rezerwacji')
@@ -54,9 +52,3 @@ class Reservation(models.Model):
     comment = models.CharField(max_length=256, null=True)
 
 
-def sp_pre_save_receiver(sender, instance, *args, **kwargs):
-    if not instance.slug:
-        instance.slug = unique_slug_generator(instance)
-
-
-pre_save.connect(sp_pre_save_receiver, sender=SportCenter)
