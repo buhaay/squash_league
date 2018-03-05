@@ -52,3 +52,20 @@ class Reservation(models.Model):
     comment = models.CharField(max_length=256, null=True)
 
 
+class Score(models.Model):
+    room = models.ForeignKey(Reservation)
+    user_main_score = models.IntegerField()
+    user_partner_score = models.IntegerField()
+
+
+class UserStats(models.Model):
+    user = models.ForeignKey(MyUser, related_name='stats')
+    games_played = models.IntegerField()
+    games_won = models.IntegerField()
+    games_lost = models.IntegerField()
+    sets_won = models.IntegerField()
+    sets_lost = models.IntegerField()
+    ranking = models.IntegerField(null=True)
+
+
+

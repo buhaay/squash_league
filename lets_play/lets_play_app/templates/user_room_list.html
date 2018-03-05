@@ -1,0 +1,22 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+    <table>
+        <tbody>
+        <tr>
+            <th>Data</th>
+            <th>Początek meczu</th>
+        </tr>
+        {% for room in rooms %}
+            <tr>
+                <td>{{ room.date }}</td>
+                <td>{{ room.time_start }}</td>
+                <td><a href="/rooms/{{ room.id }}"> Zobacz szczegóły gry </a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

@@ -32,13 +32,16 @@
                     {% if user.is_authenticated %}
                         <li><a href="/create_reservation">Zarezerwuj</a></li>
                         <li><a href="/rooms">Dołącz do gry</a></li>
+                        <li><a href="/user_reservations">Rezerwacje</a></li>
+                        <li><a href="/user_games">Mecze</a></li>
+                        <li><a href="/user_history">Historia meczów</a></li>
                         <li>Zalogowany: <a href="/profile/{{ user.id }}">{{ user.username }}</a></li>
                         <li><a href="/logout">Wyloguj</a></li>
 
 
                     {% else %}
-                        <li><a href="signup">Rejestracja</a></li>
-                        <li><a href="login">Logowanie</a></li>
+                        <li><a href="/signup">Rejestracja</a></li>
+                        <li><a href="/login">Logowanie</a></li>
 
                     {% endif %}
             </ul>

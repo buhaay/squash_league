@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import SportCenter, MyUser, Reservation
+from .models import SportCenter, MyUser, Reservation, Score
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -19,8 +19,14 @@ class SignUpForm(UserCreationForm):
 
 class CreateReservationForm(forms.ModelForm):
     time_start = forms.ChoiceField((x, str(x) + ':00') for x in range(10, 24))
-    time_end = forms.ChoiceField((x, str(x) + ':00') for x in range(10, 24))
+    time_end = forms.ChoiceField((x, str(x) + ':00') for x in range(11, 24))
     class Meta:
         model = Reservation
         fields = ['date', 'location']
         widgets = {'date': DateInput()}
+
+
+class ScoreForm(forms.ModelForm):
+    class Meta:
+        model = Score
+        fields = ['user_main_score', 'user_partner_score']

@@ -1,0 +1,31 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+        <table border="black">
+    <tbody>
+        <tr>
+            <td>Data</td>
+            <td>Lokalizacja</td>
+            <td>Przeciwnik</td>
+            <td>Wynik</td>
+        </tr>
+        {% for game in games %}
+        <tr>
+            <td>{{ game.date }}</td>
+            <td>{{ game.location }}</td>
+
+            {% if request.user == game.user_main %}
+                <td>{{ game.user_partner }}</td>
+            {% else %}
+                <td>{{ game.user_main }}</td>
+            {% endif %}
+
+            <td>{{ game.score }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+
+
+{% endblock %}

@@ -2,14 +2,13 @@
 
 {% block content %}
 
-<ul>
+    <ul>
+        {% for room in rooms %}
 
-{% for obj in rooms %}
-
-    <li><a href="/rooms/{{ obj.id }}">{{ obj.location }} {{ obj.date }}</a></li>
+            <li><a href="/rooms/{{ room.id }}">{{ room.location }} {{ room.date }}</a></li>
 
 
-{% endfor %}
-</ul>
+        {% endfor %}
+    </ul>
 
 {% endblock %}

@@ -8,20 +8,24 @@
     <li>Ostatnio zalogowany: {{ user.last_login }}</li>
     <li>Doświadczenie: {{ user.get_skill_display }}</li>
 
-    <h5>Twoje najbliższe mecze:</h5>
-    <table>
+    <table border="black">
         <tbody>
             <tr>
-                <th>Data</th>
-                <th>Początek meczu</th>
+                <td>Rozegrane mecze</td>
+                <td>Wygrane mecze</td>
+                <td>Przegrane mecze</td>
+                <td>Wygrane sety</td>
+                <td>Przegrane sety</td>
+                <td>Ranking</td>
             </tr>
-                {% for game in games %}
-                <tr>
-                    <td>{{ game.date }}</td>
-                    <td>{{ game.time_start }}</td>
-                    <td> <a href="/rooms/{{ game.id }}"> Zobacz szczegóły gry </a> </td>
-                </tr>
-{% endfor %}
+            <tr>
+                <td>{{ user_stat.games_played }}</td>
+                <td>{{ user_stat.games_won }}</td>
+                <td>{{ user_stat.games_lost }}</td>
+                <td>{{ user_stat.sets_won }}</td>
+                <td>{{ user_stat.sets_lost }}</td>
+                <td>{{ user_stat.ranking }}</td>
+            </tr>
         </tbody>
     </table>
 
