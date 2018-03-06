@@ -12,7 +12,7 @@ from django.utils.dateparse import parse_date
 from django.db.models import Q
 
 from .models import SportCenter, Reservation, MyUser, UserStats
-from .forms import CreateReservationForm, SignUpForm, ScoreForm
+from .forms import CreateReservationForm, SignUpForm, ScoreForm, EditProfileForm
 
 # Create your views here.
 from django.views import View
@@ -141,4 +141,16 @@ class UserHistoryView(View):
     def get(self, request):
         games = Reservation.objects.filter(Q(user_main=request.user) | Q(user_partner=request.user),
                                            date__lt=datetime.datetime.today())
-        return render(request, 'user_history.html', {"games": games})
+        return render(request, 'user_history.html', {'games': games})
+
+
+class EditProfileView(View):
+    def get(self, request):
+        form = EditProfileForm(instance=request.user)
+        return render(request, 'edit_profile.html', {'form': form})
+
+    def post(self, request):
+        form = EditProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return render(request, 'show_profile.html', {'form': form})

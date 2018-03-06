@@ -11,6 +11,7 @@ SKILLS = (
 
 class MyUser(AbstractUser):
     skill = models.IntegerField(choices=SKILLS, null=True)
+    avatar = models.ImageField(null=True, blank=True, upload_to='avatars')
 
 
 class SportCenter(models.Model):
