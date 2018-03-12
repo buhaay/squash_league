@@ -1,0 +1,10 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+    {% for game in games %}
+    {{ game.location }}
+    {{ game.date }}
+    {% endfor %}
+
+{% endblock %}

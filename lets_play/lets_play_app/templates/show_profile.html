@@ -1,15 +1,14 @@
 {% extends 'index.html' %}
 
 {% block content %}
-    <li>Username: <b>{{ user.username }}</b></li>
-    <li>E-mail: {{ user.email }}</li>
-    <li>Imię: {{ user.first_name }}</li>
-    <li>Nazwisko: {{ user.last_name }}</li>
-    <li>Ostatnio zalogowany: {{ user.last_login }}</li>
-    <li>Doświadczenie: {{ user.get_skill_display }}</li>
-    <li> {{ user.avatar }}</li>
-    <li><a href="/edit_profile"> Edytuj profil </a></li>
-
+    <p>Username: <b>{{ user.username }}</b></p>
+    <p>E-mail: {{ user.email }}</p>
+    <p>Imię: {{ user.first_name }}</p>
+    <p>Nazwisko: {{ user.last_name }}</p>
+    <p>Ostatnio zalogowany: {{ user.last_login }}</p>
+    <p>Doświadczenie: {{ user.get_skill_display }}</p>
+    <p><img src="/media/{{ user.avatar  }}" width="200"></p>
+    <p><a href="/edit_profile"> Edytuj profil </a></p>
 
     <table border="black">
         <tbody>

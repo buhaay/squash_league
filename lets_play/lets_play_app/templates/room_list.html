@@ -1,11 +1,25 @@
 {% extends 'index.html' %}
 
 {% block content %}
+    <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Wyszukaj">
+    </form>
 
     <ul>
         {% for room in rooms %}
 
             <li><a href="/rooms/{{ room.id }}">{{ room.location }} {{ room.date }}</a></li>
+
+
+        {% endfor %}
+    </ul>
+
+    <ul>
+        {% for object in queryset %}
+
+            <li><a href="/rooms/{{ object.id }}">{{ object.location }} {{ object.date }}</a></li>
 
 
         {% endfor %}

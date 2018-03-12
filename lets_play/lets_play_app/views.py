@@ -12,7 +12,7 @@ from django.utils.dateparse import parse_date
 from django.db.models import Q
 
 from .models import SportCenter, Reservation, MyUser, UserStats
-from .forms import CreateReservationForm, SignUpForm, ScoreForm, EditProfileForm
+from .forms import CreateReservationForm, SignUpForm, ScoreForm, EditProfileForm, SearchRoomForm
 
 # Create your views here.
 from django.views import View
@@ -46,7 +46,7 @@ class ShowProfileView(View):
     def get(self, request, user_id):
         user = MyUser.objects.get(pk=user_id)
         games = user.reservation.all()
-        user_stat = UserStats.objects.get(user_id=user_id)
+        user_stat = UserStats.objects.get_or_create(user_id=user_id)
         return render(request, 'show_profile.html', {"user": user,
                                                      "games": games,
                                                      "user_stat": user_stat})
@@ -70,7 +70,8 @@ class CreateReservationView(LoginRequiredMixin, View):
             if date_to_check < now:
                 message = 'Wybierz datę z przyszłości'
                 return render(request, 'create_reservation.html', {'message': message,
-                                                                   'form': form})
+                                                                   'form': form,
+                                                                   'range': range(7)},)
             Reservation.objects.create(user_main=request.user,
                                        location=location,
                                        date=date,
@@ -97,9 +98,28 @@ class SportCenterDetailView(DetailView):
 
 class JoinRoomView(LoginRequiredMixin, View):
     def get(self, request):
+        form = SearchRoomForm()
         rooms = Reservation.objects.filter(user_partner__isnull=True,
+                                           date__gte=datetime.datetime.today(),
                                            user_main__skill=request.user.skill).exclude(user_main=request.user)
-        return render(request, 'room_list.html', {'rooms': rooms})
+
+        return render(request, 'room_list.html', {'rooms': rooms,
+                                                  'form': form})
+
+    def post(self, request):
+        form = SearchRoomForm(request.POST)
+        if form.is_valid():
+            date_start = form.cleaned_data['date_start']
+            date_end = form.cleaned_data['date_end']
+            location = form.cleaned_data['location']
+            opponent_skill = form.cleaned_data['opponent_skill']
+            queryset = Reservation.objects.filter(date__gte=date_start,
+                                                  date__lte=date_end,
+                                                  location=location,
+                                                  user_main__skill=opponent_skill).exclude(Q(user_main=request.user) |
+                                                                                           Q(user_partner=request.user))
+            return render(request, 'room_list.html', {'queryset': queryset,
+                                                      'form': form})
 
 
 class ReservationDetailView(View):
@@ -144,13 +164,21 @@ class UserHistoryView(View):
         return render(request, 'user_history.html', {'games': games})
 
 
+class UserFutureGamesView(View):
+    def get(self, request):
+        games = Reservation.objects.filter(Q(user_main=request.user) | Q(user_partner=request.user),
+                                           Q(user_main__isnull=False), Q(user_partner__isnull=False),
+                                           date__gt=datetime.datetime.today())
+        return render(request, 'user_games.html', {'games': games})
+
+
 class EditProfileView(View):
     def get(self, request):
         form = EditProfileForm(instance=request.user)
         return render(request, 'edit_profile.html', {'form': form})
 
     def post(self, request):
-        form = EditProfileForm(request.POST, instance=request.user)
+        form = EditProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
             return render(request, 'show_profile.html', {'form': form})

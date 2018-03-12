@@ -17,8 +17,10 @@ from django.conf.urls import url
 from django.contrib import admin
 from lets_play_app.views import SignUpView, HomeView, ShowProfileView, CreateReservationView,\
     SportCenterDetailView, SportCenterListView, JoinRoomView, ReservationDetailView, DeleteRoom,\
-    UserRoomsView, UserHistoryView, EditProfileView
+    UserRoomsView, UserHistoryView, EditProfileView, UserFutureGamesView
 from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -36,6 +38,7 @@ urlpatterns = [
     url(r'^delete_room/(?P<room_id>[\d]+)$', DeleteRoom.as_view(), name='delete_room'),
     url(r'^user_reservations/$', UserRoomsView.as_view(), name='user_rooms'),
     url(r'^user_history/$', UserHistoryView.as_view(), name='user_history'),
+    url(r'^user_games/$', UserFutureGamesView.as_view(), name='user_games'),
     url(r'^edit_profile/$', EditProfileView.as_view(), name='edit_profile'),
 
     #reset password
@@ -46,4 +49,4 @@ urlpatterns = [
     url(r'^reset/done/$', auth_views.password_reset_complete, name='password_reset_complete'),
 
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

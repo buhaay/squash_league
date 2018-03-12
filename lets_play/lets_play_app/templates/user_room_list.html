@@ -10,8 +10,8 @@
         </tr>
         {% for room in rooms %}
             <tr>
-                <td>{{ room.date }}</td>
-                <td>{{ room.time_start }}</td>
+                <td>{{ room.date|date:"d E Y" }}</td>
+                <td>{{ room.time_start|time:"H:i" }}</td>
                 <td><a href="/rooms/{{ room.id }}"> Zobacz szczegóły gry </a></td>
             </tr>
         {% endfor %}

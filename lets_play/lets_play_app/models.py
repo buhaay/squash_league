@@ -1,5 +1,8 @@
+from django.conf.global_settings import MEDIA_ROOT
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+
+
 
 SKILLS = (
     (1, "Szturmowiec"),
@@ -11,7 +14,7 @@ SKILLS = (
 
 class MyUser(AbstractUser):
     skill = models.IntegerField(choices=SKILLS, null=True)
-    avatar = models.ImageField(null=True, blank=True, upload_to='avatars')
+    avatar = models.ImageField(null=True, blank=True, upload_to=MEDIA_ROOT)
 
 
 class SportCenter(models.Model):
@@ -61,11 +64,11 @@ class Score(models.Model):
 
 class UserStats(models.Model):
     user = models.ForeignKey(MyUser, related_name='stats')
-    games_played = models.IntegerField()
-    games_won = models.IntegerField()
-    games_lost = models.IntegerField()
-    sets_won = models.IntegerField()
-    sets_lost = models.IntegerField()
+    games_played = models.IntegerField(default=0)
+    games_won = models.IntegerField(default=0)
+    games_lost = models.IntegerField(default=0)
+    sets_won = models.IntegerField(default=0)
+    sets_lost = models.IntegerField(default=0)
     ranking = models.IntegerField(null=True)
 
 
