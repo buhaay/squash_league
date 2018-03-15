@@ -1,32 +1,36 @@
 {% extends 'index.html' %}
 
 {% block content %}
-    <p>Username: <b>{{ user.username }}</b></p>
-    <p>E-mail: {{ user.email }}</p>
-    <p>Imię: {{ user.first_name }}</p>
-    <p>Nazwisko: {{ user.last_name }}</p>
-    <p>Ostatnio zalogowany: {{ user.last_login }}</p>
-    <p>Doświadczenie: {{ user.get_skill_display }}</p>
-    <p><img src="/media/{{ user.avatar  }}" width="200"></p>
-    <p><a href="/edit_profile"> Edytuj profil </a></p>
+    <ul>
+        <li class="list-group-item">Username: <b>{{ user.username }}</b></li>
+        <li class="list-group-item">E-mail: {{ user.email }}</li>
+        <li class="list-group-item">Imię: {{ user.first_name }}</li>
+        <li class="list-group-item">Nazwisko: {{ user.last_name }}</li>
+        <li class="list-group-item">Ostatnio zalogowany: {{ user.last_login }}</li>
+        <li class="list-group-item">Doświadczenie: {{ user.get_skill_display }}</li>
+        <li class="list-group-item"><img src="/media/{{ user.avatar  }}" width="150"></li>
+        <li class="list-group-item"><a href="/edit_profile"> Edytuj profil </a></li>
+    </ul>
 
-    <table border="black">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Rozegrane mecze</th>
+            <th scope="col">Wygrane mecze</th>
+            <th scope="col">Przegrane mecze</th>
+            <th scope="col">Wygrane sety</th>
+            <th scope="col">Przegrane sety</th>
+            <th scope="col">Ranking</th>
+        </tr>
+        </thead>
         <tbody>
         <tr>
-            <td>Rozegrane mecze</td>
-            <td>Wygrane mecze</td>
-            <td>Przegrane mecze</td>
-            <td>Wygrane sety</td>
-            <td>Przegrane sety</td>
-            <td>Ranking</td>
-        </tr>
-        <tr>
-            <td>{{ user_stat.games_played }}</td>
-            <td>{{ user_stat.games_won }}</td>
-            <td>{{ user_stat.games_lost }}</td>
-            <td>{{ user_stat.sets_won }}</td>
-            <td>{{ user_stat.sets_lost }}</td>
-            <td>{{ user_stat.ranking }}</td>
+            <td>{{ user_stat.0.games_played }}</td>
+            <td>{{ user_stat.0.games_won }}</td>
+            <td>{{ user_stat.0.games_lost }}</td>
+            <td>{{ user_stat.0.sets_won }}</td>
+            <td>{{ user_stat.0.sets_lost }}</td>
+            <td>{{ user_stat.0.ranking }}</td>
         </tr>
         </tbody>
     </table>

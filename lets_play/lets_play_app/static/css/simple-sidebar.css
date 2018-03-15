@@ -8,6 +8,15 @@ body {
   overflow-x: hidden;
 }
 
+.img-responsive {
+    height: auto;
+    width: auto;
+    max-height: 72px;
+    max-width: 250px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 #wrapper {
   padding-left: 0;
   -webkit-transition: all 0.5s ease;
@@ -18,6 +27,7 @@ body {
 
 #wrapper.toggled {
   padding-left: 250px;
+  float:left;
 }
 
 #sidebar-wrapper {

@@ -2,14 +2,15 @@
 
 {% block content %}
 
-        <table border="black">
+    <table class="table">
+    <thead>
+        <th scope="col">Data</th>
+        <th scope="col">Lokalizacja</th>
+        <th scope="col">Przeciwnik</th>
+        <th scope="col">Wynik</th>
+        <th scope="col">Wygrana</th>
+    </thead>
     <tbody>
-        <tr>
-            <td>Data</td>
-            <td>Lokalizacja</td>
-            <td>Przeciwnik</td>
-            <td>Wynik</td>
-        </tr>
         {% for game in games %}
         <tr>
             <td>{{ game.date }}</td>
@@ -22,6 +23,14 @@
             {% endif %}
 
             <td>{{ game.score }}</td>
+
+            {% if game.score.user_main_score or game.score.user_partner_score == 3 and request.user == game.user_main %}
+            <td>wygrana</td>
+            {% else %}
+            <td>Przegrana</td>
+            {% endif %}
+
+
         </tr>
         {% endfor %}
     </tbody>

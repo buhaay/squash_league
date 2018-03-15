@@ -57,9 +57,12 @@ class Reservation(models.Model):
 
 
 class Score(models.Model):
-    room = models.ForeignKey(Reservation)
+    room = models.OneToOneField(Reservation)
     user_main_score = models.IntegerField()
     user_partner_score = models.IntegerField()
+
+    def __str__(self):
+        return "%s : %s" % (self.user_main_score, self.user_partner_score)
 
 
 class UserStats(models.Model):

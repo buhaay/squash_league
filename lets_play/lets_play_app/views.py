@@ -11,7 +11,7 @@ from django.utils import timezone
 from django.utils.dateparse import parse_date
 from django.db.models import Q
 
-from .models import SportCenter, Reservation, MyUser, UserStats
+from .models import SportCenter, Reservation, MyUser, UserStats, Score
 from .forms import CreateReservationForm, SignUpForm, ScoreForm, EditProfileForm, SearchRoomForm
 
 # Create your views here.
@@ -70,14 +70,13 @@ class CreateReservationView(LoginRequiredMixin, View):
             if date_to_check < now:
                 message = 'Wybierz datę z przyszłości'
                 return render(request, 'create_reservation.html', {'message': message,
-                                                                   'form': form,
-                                                                   'range': range(7)},)
+                                                                   'form': form,})
             Reservation.objects.create(user_main=request.user,
                                        location=location,
                                        date=date,
                                        time_start=time_start,
                                        time_end=time_end)
-            return redirect(reverse('user_rooms'))
+            return redirect(reverse('user_reservations'))
 
 
 class SportCenterListView(View):
@@ -126,22 +125,28 @@ class ReservationDetailView(View):
     def get(self, request, room_id):
         room = Reservation.objects.get(pk=room_id)
         form = ScoreForm()
+        try:
+            score = Score.objects.get(pk=room_id)
+        except Score.DoesNotExist:
+            score = None
+
         return render(request, 'room_detail.html', {'room': room,
-                                                    'form': form})
+                                                    'form': form,
+                                                    'score': score})
 
     def post(self, request, room_id):
         room = Reservation.objects.get(pk=room_id)
         if room.user_partner_id is None:
             room.user_partner_id = request.user.id
             room.save()
-            return redirect('rooms', room_id)
+            return redirect('/rooms/%s' % room_id)
         else:
             form = ScoreForm(request.POST)
             if form.is_valid():
                 score = form.save(commit=False)
                 score.room = room
                 score.save()
-                return redirect('room', room_id)
+                return redirect('/rooms/%s', room_id)
 
 
 class DeleteRoom(View):

@@ -1,6 +1,7 @@
 {% extends 'index.html' %}
 
 {% block content %}
+
     Lokalizacja: {{ room.location }}<br>
     Data: {{ room.date }}<br>
     Godzina rozpoczęcia: {{ room.time_start }}<br>
@@ -17,6 +18,8 @@
         </form>
 
     {% endif %}
+    Wynik: {{ room.user_main }} = {{ score.user_main_score }} <br>
+           {{ room.user_partner }} = {{ score.user_partner_score }} <br>
 
     {% if room.user_main and room.user_partner != None %}
         {{ room.user_main }} vs {{ room.user_partner }}<br>

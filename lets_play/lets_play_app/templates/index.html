@@ -9,34 +9,34 @@
     <meta name="author" content="">
 
     <title>Liga Squasha</title>
-
+    {% load static %}
     <!-- Bootstrap core CSS -->
-    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0/yeti/bootstrap.min.css" rel="stylesheet" integrity="sha384-ai4W/dNRpZ8Bl2+MNe2GXtf7urjWG5od4NHaCWEwrMeLzfDEQWZjFFIjQ6zG4R3W" crossorigin="anonymous">
     <link href="/static/css/simple-sidebar.css" rel="stylesheet">
 {% endblock %}
 </head>
 
 <body>
+
+
     <div id="wrapper" class="toggled">
 
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
-                <li class="sidebar-brand">
+                <li>
                     <a href="/">
-                        Liga Squasha
+                        <img src="/media/logo3.png" class="img-responsive">
                     </a>
                 </li>
                     {% if user.is_authenticated %}
-                        <li><a href="/create_reservation">Zarezerwuj</a></li>
-                        <li><a href="/rooms">Dołącz do gry</a></li>
-                        <li><a href="/user_reservations">Rezerwacje</a></li>
-                        <li><a href="/user_games">Mecze</a></li>
-                        <li><a href="/user_history">Historia meczów</a></li>
-                        <li>Zalogowany: <a href="/profile/{{ user.id }}">{{ user.username }}</a></li>
-                        <li><a href="/logout">Wyloguj</a></li>
+                        <li><a href="{% url 'create_reservation' %}">Zarezerwuj</a></li>
+                        <li><a href="{% url 'rooms' %}">Dołącz do gry</a></li>
+                        <li><a href="{% url 'user_reservations' %}">Rezerwacje</a></li>
+                        <li><a href="{% url 'user_games' %}">Mecze</a></li>
+                        <li><a href="{% url 'user_history' %}">Historia meczów</a></li>
+                        <li>Zalogowany: <a href="{% url 'profile' user.id %}">{{ user.username }}</a></li>
+                        <li><a href="{% url 'logout' %}">Wyloguj</a></li>
 
 
                     {% else %}
@@ -49,32 +49,38 @@
         <!-- /#sidebar-wrapper -->
 
         <!-- Page Content -->
-    {% block content %}
         <div id="page-content-wrapper">
             <div class="container-fluid">
-                <h1>Liga Squasha</h1>
+                {% block content %}
+                <div class="asd">
+                    <h2>Utwórz rezerwację</h2>
+                        <p>Stwórz rezerwację w pasującym Ci terminie i poczekaj aż ktoś inny do niej dołączy</p>
+                </div>
+                <div class="asd">
+                    <h2>Dołącz do gry</h2>
+                        <p>Sprawdź lub wyszukaj dostępne rezerwację i dołącz do terminu, który Ci pasuje</p>
+                </div>
+                <div class="asd">
+                    <h2>Twoje rezerwacje</h2>
+                        <p>Zarządzaj swoimi rezerwacjami</p>
+                </div>
+                <div class="asd">
+                    <h2>Twoje mecze</h2>
+                        <p>Sprawdź terminy swoich przyszłych meczów</p>
+                </div>
 
-{#                #page-content-wrapper#}
-                <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Pokaż Menu</a>
+                {% endblock %}
             </div>
         </div>
         <!-- /#page-content-wrapper -->
 
     </div>
-    {% endblock %}
     <!-- /#wrapper -->
 
     <!-- Bootstrap core JavaScript -->
     <script src="/static/vendor/jquery/jquery.min.js"></script>
     <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Menu Toggle Script -->
-    <script>
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
-    </script>
 
 </body>
 
