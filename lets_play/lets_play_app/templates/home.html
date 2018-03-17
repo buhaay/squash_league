@@ -2,5 +2,53 @@
 
 {% block content %}
 
+    <a href="{% url 'create_reservation' %}">
+        <div class="tile">
+            <p>
+            <h2>Utwórz rezerwację</h2>
+            Stwórz rezerwację w pasującym Ci terminie i poczekaj aż ktoś inny do niej dołączy
+            </p>
+        </div>
+    </a>
+    <a href="{% url 'rooms' %}">
+        <div class="tile">
+            <p>
+            <h2>Dołącz do gry</h2>
+            Sprawdź lub wyszukaj dostępne rezerwację i dołącz do terminu, który Ci pasuje
+            </p>
+        </div>
+    </a>
+    <a href="{% url 'user_reservations' %}">
+        <div class="tile">
+            <p>
+            <h2>Twoje rezerwacje</h2>
+            Zarządzaj swoimi rezerwacjami
+            </p>
+        </div>
+    </a>
+    <a href="{% url 'user_games' %}">
+        <div class="tile">
+            <p>
+            <h2>Twoje mecze</h2>
+            Sprawdź terminy swoich przyszłych meczów
+            </p>
+        </div>
+    </a>
+    <a href="{% url 'user_games' %}">
+        <div class="tile">
+            <p>
+            <h2>Historia meczów</h2>
+            Zobacz wyniki poprzednich meczów
+            </p>
+        </div>
+    </a>
+    <a href="{% url 'profile' request.user.id %}">
+        <div class="tile">
+            <p>
+            <h2>Profil</h2>
+            Sprawdź swoje statystyki lub edytuj profil
+            </p>
+        </div>
+    </a>
 
 {% endblock %}

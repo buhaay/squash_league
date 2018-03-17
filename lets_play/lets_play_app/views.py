@@ -24,6 +24,11 @@ class HomeView(View):
         return render(request, 'index.html', {})
 
 
+class HomeAfterLoginView(View):
+    def get(self, request):
+        return render(request, 'home.html', {})
+
+
 class SignUpView(View):
     def get(self, request):
         form = SignUpForm()
@@ -124,11 +129,19 @@ class JoinRoomView(LoginRequiredMixin, View):
 class ReservationDetailView(View):
     def get(self, request, room_id):
         room = Reservation.objects.get(pk=room_id)
-        form = ScoreForm()
+        form = None
         try:
-            score = Score.objects.get(pk=room_id)
+            score = Score.objects.get(room_id=room_id)
         except Score.DoesNotExist:
             score = None
+        date_to_check = datetime.datetime.combine(room.date, room.time_end)
+        now = datetime.datetime.now()
+        if now > date_to_check:
+            if score == None:
+                if room.user_partner != None:
+                    form = ScoreForm()
+        else:
+            form = None
 
         return render(request, 'room_detail.html', {'room': room,
                                                     'form': form,
@@ -143,10 +156,35 @@ class ReservationDetailView(View):
         else:
             form = ScoreForm(request.POST)
             if form.is_valid():
+                user_main_stats = UserStats.objects.get_or_create(user_id=room.user_main_id)
+                user_partner_stats = UserStats.objects.get_or_create(user_id=room.user_partner_id)
                 score = form.save(commit=False)
                 score.room = room
                 score.save()
-                return redirect('/rooms/%s', room_id)
+                user_main_stats[0].games_played += 1
+                user_partner_stats[0].games_played += 1
+                if score.user_main_score > score.user_partner_score:
+                    user_main_stats[0].ranking += 1
+                    user_main_stats[0].games_won += 1
+                    user_main_stats[0].sets_won += 3
+                    user_main_stats[0].sets_lost += form.cleaned_data['user_partner_score']
+                    user_partner_stats[0].sets_won += form.cleaned_data['user_partner_score']
+                    user_partner_stats[0].sets_lost += 3
+                    user_partner_stats[0].games_lost += 1
+                    user_main_stats[0].save()
+                    user_partner_stats[0].save()
+                else:
+                    user_partner_stats[0].ranking += 1
+                    user_partner_stats[0].games_played += 1
+                    user_partner_stats[0].sets_won += 3
+                    user_partner_stats[0].sets_lost += form.cleaned_data['user_main_score']
+                    user_main_stats[0].sets_won += form.cleaned_data['user_main_score']
+                    user_main_stats[0].sets_lost += 3
+                    user_main_stats[0].games_lost += 1
+                    user_main_stats[0].save()
+                    user_partner_stats[0].save()
+
+                return redirect('/rooms/%s' % room_id)
 
 
 class DeleteRoom(View):
@@ -187,3 +225,12 @@ class EditProfileView(View):
         if form.is_valid():
             form.save()
             return render(request, 'show_profile.html', {'form': form})
+
+
+class ToDoListView(View):
+    def get(self, request):
+        return render(request, 'todolist.html', {})
+
+class CalendarView(View):
+    def get(self, request):
+        return render(request, 'full_room.html', {})

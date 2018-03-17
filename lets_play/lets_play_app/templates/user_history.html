@@ -24,10 +24,10 @@
 
             <td>{{ game.score }}</td>
 
-            {% if game.score.user_main_score or game.score.user_partner_score == 3 and request.user == game.user_main %}
-            <td>wygrana</td>
+            {% if game.score.user_main_score > game.score.user_partner_score and request.user == game.user_main %}
+            <td><img src="/media/ok_sign.png" width="30px" height="20px"></td>
             {% else %}
-            <td>Przegrana</td>
+            <td><img src="/media/wrong.jpg" width="30px" height="20px"></td>
             {% endif %}
 
 

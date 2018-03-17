@@ -2,27 +2,48 @@
 
 {% block content %}
     <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Wyszukaj">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Wyszukaj">
     </form>
 
-    <ul>
+    <table class="table">
+        <thead>
+        <th scope="col">Data</th>
+        <th scope="col">Godzina</th>
+        <th scope="col">Lokalizacja</th>
+        <th scope="col">Zobacz szczegóły</th>
+        </thead>
+        <tbody>
         {% for room in rooms %}
-
-            <li><a href="/rooms/{{ room.id }}">{{ room.location }} {{ room.date }}</a></li>
-
-
+            <tr>
+                <td>{{ room.date|date:"d E Y" }}</td>
+                <td>{{ room.time_start|time:"H:i" }}</td>
+                <td>{{ room.location }}</td>
+                <td><a href="/rooms/{{ room.id }}">Klik</a></td>
+            </tr>
         {% endfor %}
-    </ul>
-
-    <ul>
+        </tbody>
+    </table>
+    {% if queryset %}
+    <table class="table">
+        <thead>
+        <th scope="col">Data</th>
+        <th scope="col">Godzina</th>
+        <th scope="col">Lokalizacja</th>
+        <th scope="col">Zobacz szczegóły</th>
+        </thead>
+        <tbody>
         {% for object in queryset %}
-
-            <li><a href="/rooms/{{ object.id }}">{{ object.location }} {{ object.date }}</a></li>
-
-
+            <tr>
+                <td>{{ object.date|date:"d E Y" }}</td>
+                <td>{{ object.time_start|time:"H:i" }}</td>
+                <td>{{ object.location }}</td>
+                <td><a href="/rooms/{{ object.id }}">Klik</a></td>
+            </tr>
         {% endfor %}
-    </ul>
+        </tbody>
+    </table>
+    {% endif %}
 
 {% endblock %}

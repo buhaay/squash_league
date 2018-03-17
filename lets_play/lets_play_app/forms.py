@@ -1,8 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.files.images import get_image_dimensions
-
 from .models import SportCenter, MyUser, Reservation, Score, SKILLS
+
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -10,6 +10,7 @@ class DateInput(forms.DateInput):
 
 class TimeInput(forms.TimeInput):  # https://www.djangosnippets.org/snippets/1202/
     input_type = 'time'
+
 
 
 class SignUpForm(UserCreationForm):
@@ -26,8 +27,8 @@ class SignUpForm(UserCreationForm):
 
 
 class CreateReservationForm(forms.ModelForm):
-    time_start = forms.ChoiceField((x, str(x) + ':00') for x in range(10, 23))
-    time_end = forms.ChoiceField((x, str(x) + ':00') for x in range(11, 24))
+    time_start = forms.ChoiceField(((x, str(x) + ':00') for x in range(10, 23)), label="Początek rezerwacji")
+    time_end = forms.ChoiceField(((x, str(x) + ':00') for x in range(11, 24)), label="Koniec rezerwacji")
     class Meta:
         model = Reservation
         fields = ['date', 'location']

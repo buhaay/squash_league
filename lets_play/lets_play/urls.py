@@ -17,18 +17,18 @@ from django.conf.urls import url
 from django.contrib import admin
 from lets_play_app.views import SignUpView, HomeView, ShowProfileView, CreateReservationView,\
     SportCenterDetailView, SportCenterListView, JoinRoomView, ReservationDetailView, DeleteRoom,\
-    UserRoomsView, UserHistoryView, EditProfileView, UserFutureGamesView
+    UserRoomsView, UserHistoryView, EditProfileView, UserFutureGamesView, HomeAfterLoginView, ToDoListView, CalendarView
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 
-
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', HomeView.as_view(), name='home'),
+    url(r'^$', HomeView.as_view()),
+    url(r'^home/$', HomeAfterLoginView.as_view(), name='home'),
     url(r'^signup/$', SignUpView.as_view(), name='signup'),
     url(r'^login/$', auth_views.login, name='login'),
-    url(r'^logout/$', auth_views.logout, {'next_page': 'home'}, name='logout'),
+    url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(r'^profile/(?P<user_id>[0-9]+)$', ShowProfileView.as_view(), name='profile'),
     url(r'^create_reservation/$', CreateReservationView.as_view(), name='create_reservation'),
     url(r'^sport_center/(?P<slug>[\w-]+)$', SportCenterDetailView.as_view(), name='sp_detail'),
@@ -40,6 +40,8 @@ urlpatterns = [
     url(r'^user_history/$', UserHistoryView.as_view(), name='user_history'),
     url(r'^user_games/$', UserFutureGamesView.as_view(), name='user_games'),
     url(r'^edit_profile/$', EditProfileView.as_view(), name='edit_profile'),
+    url(r'^todolist/$', ToDoListView.as_view(), name='todolist'),
+    url(r'^calendar/$', CalendarView.as_view(), name='calendar'),
 
     #reset password
     url(r'^password_reset/$', auth_views.password_reset, name='password_reset'),

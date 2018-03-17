@@ -1,13 +1,15 @@
 {% extends 'index.html' %}
 
 {% block content %}
-
-    <table>
-        <tbody>
+{% load l10n %}
+    <table class="table">
+        <thead>
         <tr>
             <th>Data</th>
             <th>Początek meczu</th>
         </tr>
+        </thead>
+        <tbody>
         {% for room in rooms %}
             <tr>
                 <td>{{ room.date|date:"d E Y" }}</td>

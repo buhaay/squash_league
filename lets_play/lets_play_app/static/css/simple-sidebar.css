@@ -17,12 +17,34 @@ body {
     margin-right: auto;
 }
 
+div.tile {
+    float: left;
+    width: 33.3%;
+    padding: 5px;
+    margin: 10px;
+    background-color: #3095d3;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 25px;
+}
+
+#logo {
+    background-image: url("../../media/logo1.png");
+    background-size: 100% 100%;
+}
+
+a {
+    color: darkblue;
+    text-decoration: none;
+}
+
 #wrapper {
   padding-left: 0;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
+    margin:auto;
 }
 
 #wrapper.toggled {

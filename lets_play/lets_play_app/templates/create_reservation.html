@@ -1,19 +1,16 @@
 {% extends 'index.html' %}
-{%  block content %}
-<div>
 
-{{ message }}
-<form action="" method="POST">
-    {% csrf_token %}
-    <table>
-    {{ form.as_table }}
-    </table>
-    <button type="submit">Zarezerwuj</button>
-</form>
+{% block content %}
 
-
-</div>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+    <div>
+        {{ message }}
+        <form action="" method="POST">
+            {% csrf_token %}
+            <table class="table">
+                {{ form.as_table }}
+            </table>
+            <button type="submit">Zarezerwuj</button>
+        </form>
+    </div>
 
 {% endblock %}

@@ -72,7 +72,7 @@ class UserStats(models.Model):
     games_lost = models.IntegerField(default=0)
     sets_won = models.IntegerField(default=0)
     sets_lost = models.IntegerField(default=0)
-    ranking = models.IntegerField(null=True)
+    ranking = models.IntegerField(default=0)
 
 
 
