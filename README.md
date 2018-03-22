@@ -1,4 +1,4 @@
-Squash league app. You can make reservations, join others reservations and search resesvations based on your skills. 
+Squash league app. You can make your own reservations, join others reservations and search resesvations based on your skills. 
 
 Main site:
 ![image](https://user-images.githubusercontent.com/34575120/37787785-16c1e8c2-2e00-11e8-83d5-f80143b05483.png)
