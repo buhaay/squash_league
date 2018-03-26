@@ -1,3 +1,4 @@
+import datetime
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.files.images import get_image_dimensions
@@ -29,10 +30,10 @@ class SignUpForm(UserCreationForm):
 class CreateReservationForm(forms.ModelForm):
     time_start = forms.ChoiceField(((x, str(x) + ':00') for x in range(10, 23)), label="Początek rezerwacji")
     time_end = forms.ChoiceField(((x, str(x) + ':00') for x in range(11, 24)), label="Koniec rezerwacji")
+    date = forms.DateField(initial=datetime.date.today(), widget=DateInput, label="Data")
     class Meta:
         model = Reservation
         fields = ['date', 'location']
-        widgets = {'date': DateInput()}
 
 
 class ScoreForm(forms.ModelForm):
@@ -45,6 +46,11 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         model = MyUser
         fields = ['first_name', 'last_name', 'email', 'skill', 'avatar']
+        labels = {'first_name': 'Imię',
+                  'last_name': 'Nazwisko',
+                  'email' : 'E-mail',
+                  'skill': 'Ranga',
+                  }
 
     # def clean_avatar(self):
     #     avatar = self.cleaned_data['avatar']
@@ -81,7 +87,7 @@ class EditProfileForm(forms.ModelForm):
 
 
 class SearchRoomForm(forms.Form):
-    date_start = forms.DateField(widget=DateInput)
-    date_end = forms.DateField(widget=DateInput)
-    location = forms.ModelChoiceField(queryset=SportCenter.objects.all())
-    opponent_skill = forms.ChoiceField(choices=SKILLS)
+    date_start = forms.DateField(widget=DateInput, label="Data początkowa"  )
+    date_end = forms.DateField(widget=DateInput, label="Data końcowa")
+    location = forms.ModelChoiceField(queryset=SportCenter.objects.all(), label="Lokalizacja")
+    opponent_skill = forms.ChoiceField(choices=SKILLS, label="Poziom przeciwnika")

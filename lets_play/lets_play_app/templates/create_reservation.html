@@ -1,16 +1,26 @@
 {% extends 'index.html' %}
 
 {% block content %}
-
-    <div>
-        {{ message }}
-        <form action="" method="POST">
-            {% csrf_token %}
-            <table class="table">
-                {{ form.as_table }}
-            </table>
-            <button type="submit">Zarezerwuj</button>
-        </form>
+    <div class="alert alert-primary" role="alert">
+        Stwórz rezerwację w odpowiadającym Ci terminie i poczekaj aż ktoś do niej dołączy.
     </div>
+    {% if message %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+    {% endif %}
+{% load bootstrap4 %}
+<form action="" method="POST" class="form">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+        <button type="submit" class="btn btn-primary">Zarezerwuj</button>
+    {% endbuttons %}
+</form>
+
+
 
 {% endblock %}

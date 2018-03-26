@@ -1,75 +1,133 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-    {% block title %}
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="">
-        <meta name="author" content="">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <title>Liga Squasha</title>
-        {% load static %}
-        <!-- Bootstrap core CSS -->
-        <link href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0/yeti/bootstrap.min.css" rel="stylesheet"
-              integrity="sha384-ai4W/dNRpZ8Bl2+MNe2GXtf7urjWG5od4NHaCWEwrMeLzfDEQWZjFFIjQ6zG4R3W"
-              crossorigin="anonymous">
-        <link href="/static/css/simple-sidebar.css" rel="stylesheet">
-    {% endblock %}
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="/static/css/simple-sidebar.css" rel="stylesheet">
+
+    <title>Squash League</title>
 </head>
-
 <body>
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="/">Squash League</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+            aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-
-<div id="wrapper" class="toggled">
-
-    <!-- Sidebar -->
-    <div id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <li>
-                <a href="/home">
-                    <img src="/media/logo3.png" class="img-responsive">
-                </a>
-            </li>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
             {% if user.is_authenticated %}
-                <li><a href="{% url 'create_reservation' %}">Zarezerwuj</a></li>
-                <li><a href="{% url 'rooms' %}">Dołącz do gry</a></li>
-                <li><a href="{% url 'user_reservations' %}">Rezerwacje</a></li>
-                <li><a href="{% url 'user_games' %}">Mecze</a></li>
-                <li><a href="{% url 'user_history' %}">Historia meczów</a></li>
-                <li>Zalogowany: <a href="{% url 'profile' user.id %}">{{ user.username }}</a></li>
-                <li><a href="{% url 'logout' %}">Wyloguj</a></li>
-                <li><a href="{% url 'todolist' %}">To Do List</a></li>
-
-
-            {% else %}
-                <li><a href="/signup">Rejestracja</a></li>
-                <li><a href="/login">Logowanie</a></li>
-
-            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'rooms' %}">Dołącz do gry</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'create_reservation' %}">Zarezerwuj</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'user_reservations' %}">Rezerwacje</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'user_games' %}">Mecze</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'user_history' %}">Historia meczów</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">{{ user.username }}</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                    <a class="dropdown-item" href="{% url 'profile' user.id %}">Pokaż profil</a>
+                    <a class="dropdown-item" href="{% url 'edit_profile' %}">Edytuj profil</a>
+                    <a class="dropdown-item" href="{% url 'logout' %}">Wyloguj</a>
+                </div>
+            </li>
         </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Szukaj" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Szukaj</button>
+        </form>
+        {% else %}
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'login' %}">Logowanie<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'signup' %}">Rejestracja</a>
+        </li>
+        {% endif %}
     </div>
-    <!-- /#sidebar-wrapper -->
+</nav>
 
-    <!-- Page Content -->
-    <div id="page-content-wrapper">
-        <div class="container-fluid">
+<main role="main">
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+
+    <div class="jumbotron">
+        <div class="container">
+
             {% block content %}
-
-
-            {% endblock %}
+                {% if user.is_authenticated %}
+            <h1 class="display-3">Witaj, {{ user.username }}!</h1>
+            <p>Aby w pełni korzystać z serwisu zachęcamy do zapoznania się z bardzo prostymi zasadami.</p>
+            <p><a class="btn btn-primary btn-lg" href="#" role="button">Poznaj zasady &raquo;</a></p>
         </div>
     </div>
-    <!-- /#page-content-wrapper -->
 
-</div>
-<!-- /#wrapper -->
+    <div class="container">
+        <!-- Example row of columns -->
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Dołącz do gry</h2>
+                <p>Sprawdź lub wyszukaj dostępne rezerwację i dołącz do terminu, który Ci pasuje.</p>
+                <p><a class="btn btn-secondary" href="{% url 'rooms' %}" role="button">Przejdź &raquo;</a></p>
+            </div>
+            <div class="col-md-4">
+                <h2>Utwórz rezerwację</h2>
+                <p>Stwórz rezerwację w pasującym Ci terminie i poczekaj aż ktoś inny do niej dołączy.</p>
+                <p><a class="btn btn-secondary" href="{% url 'create_reservation' %}" role="button">Przejdź &raquo;</a></p>
+            </div>
+            <div class="col-md-4">
+                <h2>Twoje rezerwacje</h2>
+                <p>Zarządzaj swoimi rezerwacjami.</p>
+                <p><a class="btn btn-secondary" href="{% url 'user_reservations' %}" role="button">Przejdź &raquo;</a></p>
 
-<!-- Bootstrap core JavaScript -->
-<script src="/static/vendor/jquery/jquery.min.js"></script>
-<script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            </div>
+        </div>
+    {% else %}
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-3">Witaj, użytkowniku!</h1>
+            <p>Aby korzystać z serwisu musisz się zalogować.</p>
+            <p><a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Zaloguj &raquo;</a></p>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
+        <hr>
 
+    </div> <!-- /container -->
 
+</main>
+
+<footer class="container">
+    <p>&copy; Squash League 2017-2018</p>
+</footer>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 </body>
-
 </html>

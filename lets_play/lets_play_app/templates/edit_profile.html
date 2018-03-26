@@ -1,9 +1,15 @@
 {% extends 'index.html' %}
 
 {% block content %}
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="OK">
+    {% load bootstrap4 %}
+    <form method="POST" enctype="multipart/form-data" class="form">
+        <div class="form-group">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            {% buttons %}
+                <button type="submit" class="btn btn-primary">Zapisz</button>
+            {% endbuttons %}
+        </div>
     </form>
 {% endblock %}
+

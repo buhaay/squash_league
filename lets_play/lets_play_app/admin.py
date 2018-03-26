@@ -8,4 +8,5 @@ admin.site.register(SportCenter)
 admin.site.register(Rooms)
 admin.site.register(Reservation)
 admin.site.register(UserStats)
+admin.site.register(Messages)
 

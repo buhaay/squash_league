@@ -60,9 +60,25 @@ class Score(models.Model):
     room = models.OneToOneField(Reservation)
     user_main_score = models.IntegerField()
     user_partner_score = models.IntegerField()
+    is_confirmed = models.BooleanField(default=False)
 
     def __str__(self):
         return "%s : %s" % (self.user_main_score, self.user_partner_score)
+
+
+class ScoreManager(models.Manager):
+    def add_winner_stats(self, user, score):
+        user.games_played += 1
+        user.games_won += 1
+        user.sets_won += 3
+        user.ranking += 1
+        return user.save()
+
+    def add_looser_stats(self, user, score):
+        user.games_played += 1
+        user.games_lost += 1
+        user.sets_lost += 3
+        return user.save()
 
 
 class UserStats(models.Model):
@@ -73,6 +89,16 @@ class UserStats(models.Model):
     sets_won = models.IntegerField(default=0)
     sets_lost = models.IntegerField(default=0)
     ranking = models.IntegerField(default=0)
+    objects = ScoreManager()
+
+
+class Messages(models.Model):
+    user = models.ForeignKey(MyUser)
+    content = models.CharField(max_length=256)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.content
 
 
 

@@ -2,9 +2,28 @@
 
 {% block content %}
 
-    {% for game in games %}
-    {{ game.location }}
-    {{ game.date }}
-    {% endfor %}
+    <table class="table table-bordered">
+        <thead>
+        <th scope="col">Data</th>
+        <th scope="col">Godzina</th>
+        <th scope="col">Lokalizacja</th>
+        <th scope="col">Przeciwnik</th>
+        </thead>
+        <tbody>
+        {% for game in games %}
+            <tr>
+                <td>{{ game.date }}</td>
+                <td>{{ game.time_start }}</td>
+                <td>{{ game.location }}</td>
+
+                {% if request.user == game.user_main %}
+                    <td>{{ game.user_partner }}</td>
+                {% else %}
+                    <td>{{ game.user_main }}</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}

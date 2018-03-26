@@ -1,17 +1,12 @@
 import datetime
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.contrib.auth.models import User
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.utils import timezone
-from django.utils.dateparse import parse_date
 from django.db.models import Q
 
-from .models import SportCenter, Reservation, MyUser, UserStats, Score
+from .models import SportCenter, Reservation, MyUser, UserStats, Score, Messages
 from .forms import CreateReservationForm, SignUpForm, ScoreForm, EditProfileForm, SearchRoomForm
 
 # Create your views here.
@@ -42,7 +37,7 @@ class SignUpView(View):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('home')
+            return redirect('/')
         else:
             return HttpResponse(str(form.errors))
 
@@ -73,7 +68,7 @@ class CreateReservationView(LoginRequiredMixin, View):
             date_to_check = datetime.datetime.combine(date, parsed_time)
             now = datetime.datetime.now()
             if date_to_check < now:
-                message = 'Wybierz datę z przyszłości'
+                message = 'Wybierz datę z przyszłości.'
                 return render(request, 'create_reservation.html', {'message': message,
                                                                    'form': form,})
             Reservation.objects.create(user_main=request.user,
@@ -152,37 +147,23 @@ class ReservationDetailView(View):
         if room.user_partner_id is None:
             room.user_partner_id = request.user.id
             room.save()
+            message = "%s dołączył do Twojej rezerwacji" % room.user_partner
+            Messages.objects.create(user=room.user_main, content=message)
             return redirect('/rooms/%s' % room_id)
         else:
             form = ScoreForm(request.POST)
             if form.is_valid():
-                user_main_stats = UserStats.objects.get_or_create(user_id=room.user_main_id)
-                user_partner_stats = UserStats.objects.get_or_create(user_id=room.user_partner_id)
+                user_main_stats, _ = UserStats.objects.get_or_create(user_id=room.user_main_id)
+                user_partner_stats, _ = UserStats.objects.get_or_create(user_id=room.user_partner_id)
                 score = form.save(commit=False)
                 score.room = room
                 score.save()
-                user_main_stats[0].games_played += 1
-                user_partner_stats[0].games_played += 1
                 if score.user_main_score > score.user_partner_score:
-                    user_main_stats[0].ranking += 1
-                    user_main_stats[0].games_won += 1
-                    user_main_stats[0].sets_won += 3
-                    user_main_stats[0].sets_lost += form.cleaned_data['user_partner_score']
-                    user_partner_stats[0].sets_won += form.cleaned_data['user_partner_score']
-                    user_partner_stats[0].sets_lost += 3
-                    user_partner_stats[0].games_lost += 1
-                    user_main_stats[0].save()
-                    user_partner_stats[0].save()
+                    UserStats.objects.add_winner_stats(user_main_stats, score)
+                    UserStats.objects.add_looser_stats(user_partner_stats, score)
                 else:
-                    user_partner_stats[0].ranking += 1
-                    user_partner_stats[0].games_played += 1
-                    user_partner_stats[0].sets_won += 3
-                    user_partner_stats[0].sets_lost += form.cleaned_data['user_main_score']
-                    user_main_stats[0].sets_won += form.cleaned_data['user_main_score']
-                    user_main_stats[0].sets_lost += 3
-                    user_main_stats[0].games_lost += 1
-                    user_main_stats[0].save()
-                    user_partner_stats[0].save()
+                    UserStats.objects.add_winner_stats(user_partner_stats, score)
+                    UserStats.objects.add_looser_stats(user_main_stats, score)
 
                 return redirect('/rooms/%s' % room_id)
 
@@ -227,10 +208,7 @@ class EditProfileView(View):
             return render(request, 'show_profile.html', {'form': form})
 
 
-class ToDoListView(View):
+class MessagesView(View):
     def get(self, request):
-        return render(request, 'todolist.html', {})
-
-class CalendarView(View):
-    def get(self, request):
-        return render(request, 'full_room.html', {})
+        messages = Messages.objects.filter(user=request.user)
+        return render(request, 'messages.html', {'messages': messages})

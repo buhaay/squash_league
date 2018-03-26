@@ -17,7 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from lets_play_app.views import SignUpView, HomeView, ShowProfileView, CreateReservationView,\
     SportCenterDetailView, SportCenterListView, JoinRoomView, ReservationDetailView, DeleteRoom,\
-    UserRoomsView, UserHistoryView, EditProfileView, UserFutureGamesView, HomeAfterLoginView, ToDoListView, CalendarView
+    UserRoomsView, UserHistoryView, EditProfileView, UserFutureGamesView, HomeAfterLoginView, MessagesView
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -40,8 +40,7 @@ urlpatterns = [
     url(r'^user_history/$', UserHistoryView.as_view(), name='user_history'),
     url(r'^user_games/$', UserFutureGamesView.as_view(), name='user_games'),
     url(r'^edit_profile/$', EditProfileView.as_view(), name='edit_profile'),
-    url(r'^todolist/$', ToDoListView.as_view(), name='todolist'),
-    url(r'^calendar/$', CalendarView.as_view(), name='calendar'),
+    url(r'^messages/$', MessagesView.as_view(), name='messages'),
 
     #reset password
     url(r'^password_reset/$', auth_views.password_reset, name='password_reset'),

@@ -11,11 +11,16 @@
         {% if field.help_text %}
           <small style="color: grey">{{ field.help_text }}</small>
         {% endif %}
+          {% if field.field.required %}
+        <span class="required">*</span>
+    {% endif %}
         {% for error in field.errors %}
           <p style="color: red">{{ error }}</p>
         {% endfor %}
       </p>
     {% endfor %}
-    <button type="submit">Sign up</button>
+    <button class="btn btn-secondary" type="submit">Utwórz konto</button>
   </form>
+
 {% endblock %}
+
