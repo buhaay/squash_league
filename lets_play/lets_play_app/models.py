@@ -60,7 +60,8 @@ class Score(models.Model):
     room = models.OneToOneField(Reservation)
     user_main_score = models.IntegerField()
     user_partner_score = models.IntegerField()
-    is_confirmed = models.BooleanField(default=False)
+    is_confirmed_by_user_main = models.BooleanField(default=False)
+    is_confirmed_by_user_partner = models.BooleanField(default=False)
 
     def __str__(self):
         return "%s : %s" % (self.user_main_score, self.user_partner_score)

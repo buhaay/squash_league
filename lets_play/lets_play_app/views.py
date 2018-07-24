@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.db.models import Q
 
 from .models import SportCenter, Reservation, MyUser, UserStats, Score, Messages
-from .forms import CreateReservationForm, SignUpForm, ScoreForm, EditProfileForm, SearchRoomForm
+from .forms import CreateReservationForm, SignUpForm, ScoreForm, EditProfileForm, SearchRoomForm, AcceptScoreForm
 
 # Create your views here.
 from django.views import View
@@ -132,11 +132,15 @@ class ReservationDetailView(View):
         date_to_check = datetime.datetime.combine(room.date, room.time_end)
         now = datetime.datetime.now()
         if now > date_to_check:
-            if score == None:
-                if room.user_partner != None:
-                    form = ScoreForm()
-        else:
-            form = None
+            if score is None:
+                if room.user_partner is not None:
+                    form = ScoreForm(prefix='score')
+            # elif room.user_main == request.user and score.is_confirmed_by_user_main is False:
+            #     form = AcceptScoreForm(prefix='accept_score')
+            # elif room.user_partner == request.user and score.is_confirmed_by_user_partner is False:
+            #     form = AcceptScoreForm(prefix='accept_score')
+            else:
+                form = None
 
         return render(request, 'room_detail.html', {'room': room,
                                                     'form': form,
@@ -151,19 +155,25 @@ class ReservationDetailView(View):
             Messages.objects.create(user=room.user_main, content=message)
             return redirect('/rooms/%s' % room_id)
         else:
-            form = ScoreForm(request.POST)
-            if form.is_valid():
-                user_main_stats, _ = UserStats.objects.get_or_create(user_id=room.user_main_id)
-                user_partner_stats, _ = UserStats.objects.get_or_create(user_id=room.user_partner_id)
-                score = form.save(commit=False)
-                score.room = room
-                score.save()
-                if score.user_main_score > score.user_partner_score:
-                    UserStats.objects.add_winner_stats(user_main_stats, score)
-                    UserStats.objects.add_looser_stats(user_partner_stats, score)
-                else:
-                    UserStats.objects.add_winner_stats(user_partner_stats, score)
-                    UserStats.objects.add_looser_stats(user_main_stats, score)
+            form = ScoreForm(request.POST, prefix='score')
+            if 'score' in request.POST:
+                if form.is_valid():
+                    score = form.save(commit=False)
+                    score.room = room
+                    score.save()
+            elif 'accept_score' in request.POST:
+                room.score.is_confirmed_by_user_partner = True
+                    # user_main_stats, _ = UserStats.objects.get_or_create(user_id=room.user_main_id)
+                    # user_partner_stats, _ = UserStats.objects.get_or_create(user_id=room.user_partner_id)
+
+
+                        # if score.user_main_score > score.user_partner_score:
+                        #     UserStats.objects.add_winner_stats(user_main_stats, score)
+                        #     UserStats.objects.add_looser_stats(user_partner_stats, score)
+                        # else:
+                        #     UserStats.objects.add_winner_stats(user_partner_stats, score)
+                        #     UserStats.objects.add_looser_stats(user_main_stats, score)
+
 
                 return redirect('/rooms/%s' % room_id)
 

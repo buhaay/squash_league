@@ -31,6 +31,7 @@ class CreateReservationForm(forms.ModelForm):
     time_start = forms.ChoiceField(((x, str(x) + ':00') for x in range(10, 23)), label="Początek rezerwacji")
     time_end = forms.ChoiceField(((x, str(x) + ':00') for x in range(11, 24)), label="Koniec rezerwacji")
     date = forms.DateField(initial=datetime.date.today(), widget=DateInput, label="Data")
+
     class Meta:
         model = Reservation
         fields = ['date', 'location']
@@ -40,6 +41,15 @@ class ScoreForm(forms.ModelForm):
     class Meta:
         model = Score
         fields = ['user_main_score', 'user_partner_score']
+
+
+class AcceptScoreForm(forms.Form):
+    is_confirmed_by_user_partner = forms.TypedChoiceField(coerce=lambda x: x == 'True',
+                                                       choices=((False, 'Odrzuć'), (True, 'Potwierdź')))
+
+    class Meta:
+        model = Score
+        fields = ['is_confirmed_by_user_partner']
 
 
 class EditProfileForm(forms.ModelForm):
