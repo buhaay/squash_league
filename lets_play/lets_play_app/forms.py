@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
+
 import datetime
 from django import forms
 from django.contrib.auth.forms import UserCreationForm

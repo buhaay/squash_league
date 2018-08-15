@@ -25,7 +25,7 @@ SECRET_KEY = ')rye@7qy-ge!1%i_er%t4a+7jne(&*i5+(c0#z932f&yx^ropr'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['buhay.pythonanywere.com']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'lets_play_app',
+    'bootstrap4',
 ]
 
 MIDDLEWARE = [
@@ -111,10 +112,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
-LANGUAGES = (
-    ('pl', _('Polish')),
-)
-
 LANGUAGE_CODE = 'pl'
 
 TIME_ZONE = 'UTC'

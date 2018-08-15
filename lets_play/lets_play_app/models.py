@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
+
 from django.conf.global_settings import MEDIA_ROOT
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -49,7 +52,7 @@ class SquashCourt(models.Model):
 class Reservation(models.Model):
     user_main = models.ForeignKey(MyUser, related_name='reservation')
     user_partner = models.ForeignKey(MyUser, related_name='user_partner', null=True)
-    date = models.DateField(auto_now=False, auto_now_add=False, verbose_name='Wybierz dzień')
+    date = models.DateField(auto_now=False, auto_now_add=False, verbose_name="Wybierz dzień")
     time_start = models.TimeField(auto_now=False, auto_now_add=False, verbose_name='Początek rezerwacji')
     time_end = models.TimeField(auto_now=False, auto_now_add=False, verbose_name='Koniec rezerwacji')
     location = models.ForeignKey(SportCenter, verbose_name='Wybierz lokalizację')

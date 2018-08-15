@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
+
 import datetime
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -185,10 +188,10 @@ class DeleteRoom(View):
         return redirect('/profile/%s' % request.user.id)
 
 
-class UserRoomsView(View):
+class UserReservationsView(View):
     def get(self, request):
         rooms = request.user.reservation.all()
-        return render(request, 'user_room_list.html', {'rooms': rooms})
+        return render(request, 'user_reservations.html', {'rooms': rooms})
 
 
 class UserHistoryView(View):
