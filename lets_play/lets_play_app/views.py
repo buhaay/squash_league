@@ -103,10 +103,10 @@ class JoinRoomView(LoginRequiredMixin, View):
         form = SearchRoomForm()
         rooms = Reservation.objects.filter(user_partner__isnull=True,
                                            date__gte=datetime.datetime.today(),
-                                           user_main__skill=request.user.skill).exclude(user_main=request.user)
+                                           user_main__skill=request.user.skill).exclude(user_main=request.user).order_by('date')
 
-        return render(request, 'room_list.html', {'rooms': rooms,
-                                                  'form': form})
+        return render(request, 'reservations_list.html', {'rooms': rooms,
+                                                          'form': form})
 
     def post(self, request):
         form = SearchRoomForm(request.POST)
@@ -126,28 +126,44 @@ class JoinRoomView(LoginRequiredMixin, View):
 
 class ReservationDetailView(View):
     def get(self, request, room_id):
-        room = Reservation.objects.get(pk=room_id)
-        form = None
+
+        reservation = Reservation.objects.get(pk=room_id)
+        past = False
         try:
             score = Score.objects.get(room_id=room_id)
         except Score.DoesNotExist:
             score = None
-        date_to_check = datetime.datetime.combine(room.date, room.time_end)
-        now = datetime.datetime.now()
-        if now > date_to_check:
-            if score is None:
-                if room.user_partner is not None:
-                    form = ScoreForm(prefix='score')
-            # elif room.user_main == request.user and score.is_confirmed_by_user_main is False:
-            #     form = AcceptScoreForm(prefix='accept_score')
-            # elif room.user_partner == request.user and score.is_confirmed_by_user_partner is False:
-            #     form = AcceptScoreForm(prefix='accept_score')
-            else:
-                form = None
 
-        return render(request, 'room_detail.html', {'room': room,
-                                                    'form': form,
-                                                    'score': score})
+        # reservation date
+        reservation_date = datetime.datetime.combine(reservation.date, reservation.time_end)
+        now = datetime.datetime.now()
+        if now > reservation_date:
+            past = True
+
+        # check if display score form
+        score_form = None
+        if past:
+            if not score:
+                if reservation.user_partner:
+                    score_form = ScoreForm(prefix='score')
+
+        # cancel reservation button
+        cancel_reservation = False
+        if request.user.id == reservation.user_main_id or reservation.user_partner_id:
+            if not score:
+                if not past:
+                    cancel_reservation = True
+
+        print(reservation.user_main_id)
+        print(self.request.user.id)
+
+        context = {'room'               : reservation,
+                   'score_form'         : score_form,
+                   'score'              : score,
+                   'cancel_reservation' : cancel_reservation
+                   }
+
+        return render(request, 'reservation_detail.html', context)
 
     def post(self, request, room_id):
         room = Reservation.objects.get(pk=room_id)
@@ -156,7 +172,7 @@ class ReservationDetailView(View):
             room.save()
             message = "%s dołączył do Twojej rezerwacji" % room.user_partner
             Messages.objects.create(user=room.user_main, content=message)
-            return redirect('/rooms/%s' % room_id)
+            return redirect('/reservations_list/%s' % room_id)
         else:
             form = ScoreForm(request.POST, prefix='score')
             if 'score' in request.POST:
@@ -178,7 +194,7 @@ class ReservationDetailView(View):
                         #     UserStats.objects.add_looser_stats(user_main_stats, score)
 
 
-                return redirect('/rooms/%s' % room_id)
+                return redirect('/reservations_list/%s' % room_id)
 
 
 class DeleteRoom(View):
@@ -190,7 +206,7 @@ class DeleteRoom(View):
 
 class UserReservationsView(View):
     def get(self, request):
-        rooms = request.user.reservation.all()
+        rooms = request.user.reservation.filter(date__gt=datetime.datetime.now()).order_by('date')
         return render(request, 'user_reservations.html', {'rooms': rooms})
 
 
@@ -224,4 +240,4 @@ class EditProfileView(View):
 class MessagesView(View):
     def get(self, request):
         messages = Messages.objects.filter(user=request.user)
-        return render(request, 'messages.html', {'messages': messages})
+        return render(request, 'kalendar.html', {'messages': messages})
