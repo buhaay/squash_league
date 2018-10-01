@@ -22,7 +22,11 @@
                 <td>{{ game.user_main }}</td>
             {% endif %}
 
+            {% if game.score %}
             <td>{{ game.score }}</td>
+            {% else %}
+            <td><a href="/reservations_list/{{ room.id }}">Uzupełnij wynik</a></td>
+            {% endif %}
             {% if game.score %}
             {% if game.score.user_main_score > game.score.user_partner_score and request.user == game.user_main %}
             <td><img src="/media/ok_sign.png" width="30px" height="20px"></td>

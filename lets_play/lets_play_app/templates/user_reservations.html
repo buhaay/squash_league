@@ -14,12 +14,10 @@
             <tr>
                 <td>{{ room.date|date:"d E Y" }}</td>
                 <td>{{ room.time_start|time:"H:i" }}</td>
-                <td><a href="/rooms/{{ room.id }}"> Zobacz szczegóły gry </a></td>
+                <td><a href="/reservations_list/{{ room.id }}"> Zobacz szczegóły gry </a></td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
-
 {% endblock %}
 
