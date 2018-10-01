@@ -24,7 +24,7 @@
         <ul class="navbar-nav mr-auto">
             {% if user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'rooms' %}">Dołącz do gry</a>
+                <a class="nav-link" href="{% url 'reservations_list' %}">Dołącz do gry</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'create_reservation' %}">Zarezerwuj</a>
@@ -84,7 +84,7 @@
             <div class="col-md-4">
                 <h2>Dołącz do gry</h2>
                 <p>Sprawdź lub wyszukaj dostępne rezerwację i dołącz do terminu, który Ci pasuje.</p>
-                <p><a class="btn btn-secondary" href="{% url 'rooms' %}" role="button">Przejdź &raquo;</a></p>
+                <p><a class="btn btn-secondary" href="{% url 'reservations_list' %}" role="button">Przejdź &raquo;</a></p>
             </div>
             <div class="col-md-4">
                 <h2>Utwórz rezerwację</h2>
@@ -130,4 +130,6 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 </body>
+
+
 </html>
