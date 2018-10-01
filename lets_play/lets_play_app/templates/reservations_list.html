@@ -1,0 +1,61 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <div class="alert alert-primary" role="alert">
+        Dołącz do rezerwacji z poniższej listy lub wyszukaj rezerwacje w pasującym Ci terminie.
+    </div>
+    {% load bootstrap4 %}
+    <form method="POST" class="form">
+    <div class="form-group">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+        <button type="submit" class="btn btn-primary">Wyszukaj</button>
+        {% endbuttons %}
+        </div>
+    </form>
+
+    <table class="table table-bordered">
+        <thead>
+        <th scope="col">Data</th>
+        <th scope="col">Godzina</th>
+        <th scope="col">Lokalizacja</th>
+        <th scope="col">Przeciwnik</th>
+        <th scope="col">Szczegóły</th>
+        </thead>
+        <tbody>
+        {% for room in rooms %}
+            <tr>
+                <td>{{ room.date|date:"d E Y" }}</td>
+                <td>{{ room.time_start|time:"H:i" }}</td>
+                <td>{{ room.location }}</td>
+                <td>{{ room.user_main }}</td>
+                <td><a href="/reservations_list/{{ room.id }}">Zobacz</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if queryset %}
+    <table class="table table-bordered">
+        <thead>
+        <th scope="col">Data</th>
+        <th scope="col">Godzina</th>
+        <th scope="col">Lokalizacja</th>
+        <th scope="col">Przeciwnik</th>
+        <th scope="col">Szczegóły</th>
+        </thead>
+        <tbody>
+        {% for object in queryset %}
+            <tr>
+                <td>{{ object.date|date:"d E Y" }}</td>
+                <td>{{ object.time_start|time:"H:i" }}</td>
+                <td>{{ object.location }}</td>
+                <td>{{ object.user_main }}</td>
+                <td><a href="/reservations_list/{{ object.id }}">Zobacz</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+{% endblock %}

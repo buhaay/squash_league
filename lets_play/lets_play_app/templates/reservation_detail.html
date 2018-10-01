@@ -1,0 +1,44 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    {% load l10n %}
+    <ul>
+        <li class="list-group-item">Lokalizacja: {{ room.location }}</li>
+        <li class="list-group-item">Data: {{ room.date }}</li>
+        <li class="list-group-item">Godzina rozpoczęcia: {{ room.time_start }}</li>
+        <li class="list-group-item">Godzina zakończenia: {{ room.time_end }}</li>
+
+        {% if room.user_main != request.user and room.user_partner == None or room.user_main == None %}
+            <form method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Dołącz do gry">
+            </form>
+        {% endif %}
+
+        {% if form != None %}
+            {% load bootstrap4 %}
+            <form action="" method="POST" class="form">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% buttons %}
+                    <button type="submit" class="btn btn-primary">Wyślij</button>
+                {% endbuttons %}
+            </form>
+        {% endif %}
+
+<!--         <form method="POST">
+            {% csrf_token %}
+                <input type="submit" name="accept_score" value="Potwierdź" />
+        </form>
+ -->
+        {% if cancel_reservation %}
+            <li class="list-group-item"><a href="/delete_room/{{ room.id }}" class="btn btn-secondary">Odwołaj mecz</a>
+            </li>
+        {% endif %}
+
+        {% if score != None %}
+            <li class="list-group-item">Wynik: {{ room.user_main }} <b>{{ score.user_main_score }}</b> :
+                <b>{{ score.user_partner_score }}</b> {{ room.user_partner }} </li>
+        {% endif %}
+
+{% endblock %}
