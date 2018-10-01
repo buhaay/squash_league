@@ -33,14 +33,15 @@ urlpatterns = [
     url(r'^create_reservation/$', CreateReservationView.as_view(), name='create_reservation'),
     url(r'^sport_center/(?P<slug>[\w-]+)$', SportCenterDetailView.as_view(), name='sp_detail'),
     url(r'^sport_centres/$', SportCenterListView.as_view(), name='create_room'),
-    url(r'^rooms/$', JoinRoomView.as_view(), name='rooms'),
-    url(r'^rooms/(?P<room_id>[\d]+)$', ReservationDetailView.as_view(), name='room'),
+    url(r'^reservations_list/$', JoinRoomView.as_view(), name='reservations_list'),
+    url(r'^reservations_list/(?P<room_id>[\d]+)$', ReservationDetailView.as_view(), name='room'),
     url(r'^delete_room/(?P<room_id>[\d]+)$', DeleteRoom.as_view(), name='delete_room'),
     url(r'^user_reservations/$', UserReservationsView.as_view(), name='user_reservations'),
     url(r'^user_history/$', UserHistoryView.as_view(), name='user_history'),
     url(r'^user_games/$', UserFutureGamesView.as_view(), name='user_games'),
     url(r'^edit_profile/$', EditProfileView.as_view(), name='edit_profile'),
     url(r'^messages/$', MessagesView.as_view(), name='messages'),
+    # url(r'^calendar/$', MessagesView.as_view(), name='messages'),
 
     #reset password
     url(r'^password_reset/$', auth_views.password_reset, name='password_reset'),
