@@ -83,7 +83,7 @@ DATABASES = {
         'NAME': 'lets_play_db',
         'ENGINE': 'django.db.backends.postgresql',
         'USER': 'postgres',
-        'PASSWORD': 'coderslab',
+        'PASSWORD': 'postgres',
         'OPTIONS': {
 
         },
@@ -133,7 +133,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = '/static/'
 
 
