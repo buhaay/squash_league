@@ -11,24 +11,24 @@
         <th scope="col">Wygrana</th>
     </thead>
     <tbody>
-        {% for game in games %}
+        {% for room in rooms %}
         <tr>
-            <td>{{ game.date }}</td>
-            <td>{{ game.location }}</td>
+            <td>{{ room.date }}</td>
+            <td>{{ room.location }}</td>
 
-            {% if request.user == game.user_main %}
-                <td>{{ game.user_partner }}</td>
+            {% if request.user == room.user_main %}
+                <td>{{ room.user_partner }}</td>
             {% else %}
-                <td>{{ game.user_main }}</td>
+                <td>{{ room.user_main }}</td>
             {% endif %}
 
-            {% if game.score %}
-            <td>{{ game.score }}</td>
+            {% if room.score %}
+            <td>{{ room.score }}</td>
             {% else %}
             <td><a href="/reservations_list/{{ room.id }}">Uzupełnij wynik</a></td>
             {% endif %}
-            {% if game.score %}
-            {% if game.score.user_main_score > game.score.user_partner_score and request.user == game.user_main %}
+            {% if room.score %}
+            {% if room.score.user_main_score > room.score.user_partner_score and request.user == room.user_main %}
             <td><img src="/media/ok_sign.png" width="30px" height="20px"></td>
             {% else %}
             <td><img src="/media/wrong.jpg" width="30px" height="20px"></td>
