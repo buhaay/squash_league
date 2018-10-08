@@ -1,11 +1,11 @@
 {% extends 'index.html' %}
 
 {% block content %}
-  <h2>Login</h2>
+  <h2>Zaloguj się</h2>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button class="btn btn-secondary" type="submit">Login</button>
-  Nie posiadasz konta? <a href="/signup">Utwórz konto</a>
+    <button class="btn btn-secondary" type="submit">Zaloguj</button>
+    <a href="/signup" class="btn btn-secondary">Utwórz konto</a>
   </form>
 {% endblock %}

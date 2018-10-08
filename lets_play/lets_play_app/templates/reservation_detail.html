@@ -11,15 +11,15 @@
         {% if room.user_main != request.user and room.user_partner == None or room.user_main == None %}
             <form method="POST">
                 {% csrf_token %}
-                <input type="submit" value="Dołącz do gry">
+                <li class="list-group-item"><input type="submit" class="btn btn-secondary" value="Dołącz do gry"></li>
             </form>
         {% endif %}
 
-        {% if form != None %}
+        {% if score_form %}
             {% load bootstrap4 %}
             <form action="" method="POST" class="form">
                 {% csrf_token %}
-                {% bootstrap_form form %}
+                {% bootstrap_form score_form %}
                 {% buttons %}
                     <button type="submit" class="btn btn-primary">Wyślij</button>
                 {% endbuttons %}
