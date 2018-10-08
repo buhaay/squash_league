@@ -22,11 +22,6 @@ class HomeView(View):
         return render(request, 'index.html', {})
 
 
-class HomeAfterLoginView(View):
-    def get(self, request):
-        return render(request, 'home.html', {})
-
-
 class SignUpView(View):
     def get(self, request):
         form = SignUpForm()
@@ -145,7 +140,11 @@ class ReservationDetailView(View):
         if past:
             if not score:
                 if reservation.user_partner:
-                    score_form = ScoreForm(prefix='score')
+                    score_form = ScoreForm(prefix='score', 
+                                           initial={'user_main_score'    : 0,
+                                                    'user_partner_score' : 0})
+                    score_form.fields['user_main_score'].label = reservation.user_main
+                    score_form.fields['user_partner_score'].label = reservation.user_partner
 
         # cancel reservation button
         cancel_reservation = False
@@ -170,16 +169,18 @@ class ReservationDetailView(View):
         if room.user_partner_id is None:
             room.user_partner_id = request.user.id
             room.save()
-            message = "%s dołączył do Twojej rezerwacji" % room.user_partner
-            Messages.objects.create(user=room.user_main, content=message)
+            message = "Pomyślnie dołączyłeś do rezerwacji %s" % room.user_main
+            private_message = "%s dołączył do Twojej rezerwacji" % room.user_partner
+            Messages.objects.create(user=room.user_main, content=private_message)
             return redirect('/reservations_list/%s' % room_id)
         else:
             form = ScoreForm(request.POST, prefix='score')
-            if 'score' in request.POST:
+            if 'score-user_main_score' and 'score-user_partner_score' in request.POST:
                 if form.is_valid():
                     score = form.save(commit=False)
                     score.room = room
                     score.save()
+                return redirect('/reservations_list/%s' % room_id)
             elif 'accept_score' in request.POST:
                 room.score.is_confirmed_by_user_partner = True
                     # user_main_stats, _ = UserStats.objects.get_or_create(user_id=room.user_main_id)
@@ -212,9 +213,9 @@ class UserReservationsView(View):
 
 class UserHistoryView(View):
     def get(self, request):
-        games = Reservation.objects.filter(Q(user_main=request.user) | Q(user_partner=request.user),
-                                           date__lt=datetime.datetime.today())
-        return render(request, 'user_history.html', {'games': games})
+        rooms = Reservation.objects.filter(Q(user_main=request.user) | Q(user_partner=request.user),
+                                           date__lt=datetime.datetime.today()).order_by('date')
+        return render(request, 'user_history.html', {'rooms': rooms})
 
 
 class UserFutureGamesView(View):
