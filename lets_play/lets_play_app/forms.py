@@ -22,7 +22,14 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = MyUser
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'skill')
-
+        labels = {'username'  : 'Nazwa użytkownika',
+                  'first_name': 'Imie',
+                  'last_name' : 'Nazwisko',
+                  'email'     : 'E-mail',
+                  'skill'     : 'Ranga',
+                  'password1' : 'Hasło',
+                  'password2' : 'Powtórz hasło',
+                  }
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
 
@@ -44,7 +51,6 @@ class ScoreForm(forms.ModelForm):
     class Meta:
         model = Score
         fields = ['user_main_score', 'user_partner_score']
-
 
 class AcceptScoreForm(forms.Form):
     is_confirmed_by_user_partner = forms.TypedChoiceField(coerce=lambda x: x == 'True',
