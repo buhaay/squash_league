@@ -17,7 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from lets_play_app.views import SignUpView, HomeView, ShowProfileView, CreateReservationView,\
     SportCenterDetailView, SportCenterListView, JoinRoomView, ReservationDetailView, DeleteRoom,\
-    UserReservationsView, UserHistoryView, EditProfileView, UserFutureGamesView, HomeAfterLoginView, MessagesView
+    UserReservationsView, UserHistoryView, EditProfileView, UserFutureGamesView, MessagesView
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -25,7 +25,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', HomeView.as_view()),
-    url(r'^home/$', HomeAfterLoginView.as_view(), name='home'),
     url(r'^signup/$', SignUpView.as_view(), name='signup'),
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
